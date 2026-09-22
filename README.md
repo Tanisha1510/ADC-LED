@@ -33,21 +33,34 @@ Analyse the ADC register range by keeping the LED at full brightness for the fir
 15. Run the program on the S32K144 board.
 
 ---
-## OUTPUT
+## CODE
+```
 
+#include "sdk_project_config.h"
 
+uint16_t adcstat;
+int main(void)
+{
+	CLOCK_DRV_Init(&clockMan1_InitConfig0);
+	PINS_DRV_Init(NUM_OF_CONFIGURED_PINS0,g_pin_mux_InitConfigArr0);
+	ADC_Init(&adc_pal_1_instance,&adc_pal_1_config);
+	PWM_Init(&pwm_pal_1_instance,&pwm_pal_1_configs);
+while(1)
+{
+	ADC_StartGroupConversion(&adc_pal_1_instance,0U);
+	adcstat=adc_pal_1_results0[0];
 
-
-
-
-
-
-
-
-
-
-
-
+	if(adcstat<=2048U)
+	{
+	    	PWM_UpdateDuty(&pwm_pal_1_instance,0U,0);
+	}
+	else
+	{
+		PWM_UpdateDuty(&pwm_pal_1_instance,0U,4095);
+	}
+}
+}
+```
 
 
 
